@@ -1,16 +1,41 @@
+//! platina is a simple parameterized golden file testing library.
+//!
+//! # Usage
+//!
+//! First, create a test by implementing [`Testable`] for a struct.
+//! Then, create a new [`TestFile`], with the path to a platina test file.
+//! Finally, run your tests.
+//!
+//! [`Testable`]: ../platina/trait.Testable.html
+//! [`TestFile`]: ../platina/struct.TestFile.html
+//!
+//! ## Examples
+//!
+//! An example can found in the in the `README.md` [on
+//! GitHub].
+//!
+//! [on GitHub]: https://github.com/luminarys/platina/blob/master/README.md
+//!
+//! ## Guide
+//!
+//! A getting started guide is available in the
+
 use std::io::{self, BufReader, BufRead, BufWriter, Write};
 use std::fs::File;
 use std::collections::HashMap;
 
+/// Testable describes something which can be tested via platina.
 pub trait Testable {
     fn run_testcase(&mut self, case: &mut TestCase);
 }
 
+/// TestFile represents a plaintext file in platina's expected format
 #[derive(Clone, Debug)]
 pub struct TestFile {
     file: String,
 }
 
+/// TestCase represents one logical case for a test file in platina.
 #[derive(Clone, Debug)]
 pub struct TestCase {
     name: String,
@@ -30,15 +55,20 @@ const CASE_SEP: &'static str =  "===========";
 const PARAM_SEP: &'static str = "-----------";
 
 impl TestFile {
+    /// Construct a new TestFile from a path to a platina text file.
     pub fn new(path: &str) -> TestFile {
         TestFile {
             file: path.to_owned()
         }
     }
+
+    /// Runs tests in this file using the provided tester.
     pub fn run_tests<T: Testable>(&mut self, tester: &mut T) -> io::Result<()> {
         self.run_test_(tester, false)
     }
 
+    /// Runs tests in this file using the provided tester, updating the test file
+    /// with the expected results.
     pub fn run_tests_and_update<T: Testable>(&mut self, tester: &mut T) -> io::Result<()> {
         self.run_test_(tester, true)
     }
@@ -140,10 +170,13 @@ impl TestCase {
         Ok(())
     }
 
+    /// Returns a param's value if it exists
     pub fn get_param(&self, param: &str) -> Option<String> {
         self.params.get(param).map(String::from)
     }
 
+    /// Updates a param with the expected value. If there is a mismatch then the
+    /// TestFile will produce a failure at the end of the test.
     pub fn compare_and_update_param(&mut self, param: &str, expected: &str) {
         let actual = self.params.insert(param.to_owned(), expected.to_owned()).unwrap_or(
             "".to_owned()
