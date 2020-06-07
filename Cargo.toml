@@ -1,5 +1,7 @@
 [package]
 name = "platina"
+description = "parameterized golden testing library"
+license = "ISC"
 version = "0.1.0"
 authors = ["Luminarys <postmaster@gensok.io"]
 edition = "2018"
