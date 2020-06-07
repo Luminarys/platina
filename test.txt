@@ -1,0 +1,24 @@
+[case1]
+[flaga]
+true
+-----------
+[flagb]
+1
+-----------
+[input]
+test case 1
+-----------
+[expected_output]
+result 1
+-----------
+===========
+
+[case2]
+[input]
+test case 2
+-----------
+[expected_output]
+result 2
+-----------
+===========
+
