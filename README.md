@@ -25,26 +25,26 @@ We could represent our tests using platina with a data file like this:
 [case1]
 [input1]
 a
-----------
+-----------
 [input2]
 b
-----------
+-----------
 [output]
 1
-----------
-==========
+-----------
+===========
 
 [case1]
 [input1]
 c
-----------
+-----------
 [input2]
 d
-----------
+-----------
 [output]
 1
-----------
-==========
+-----------
+===========
 ```
 Then we can write our tests like this:
 ```rust
